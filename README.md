@@ -1,0 +1,1 @@
+# gcp-vm-log-upload-startup-script
