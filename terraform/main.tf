@@ -1,6 +1,6 @@
 ########################################
-# Cloud Storage Bucket for VM Logs
-#################################
+# Storage Module (Cloud Storage Bucket)
+########################################
 module "storage" {
   source      = "./modules/storage"
   bucket_name = var.bucket_name
@@ -8,24 +8,10 @@ module "storage" {
 }
 
 ########################################
-# Service Account for VM Log Upload
+# Service Account + IAM Module
 ########################################
-resource "google_service_account" "vm_sa" {
-  account_id   = "tf-vm-log-uploader"
-  display_name = "Terraform VM Log Uploader Service Account"
-}
-
-########################################
-# IAM: Allow Service Account to Upload Logs
-########################################
-resource "google_storage_bucket_iam_member" "vm_sa_writer" {
-  bucket = google_storage_bucket.vm_logs.name
-  role   = "roles/storage.objectCreator"
-  member = "serviceAccount:${google_service_account.vm_sa.email}"
-}
-
-resource "google_storage_bucket_iam_member" "vm_sa_reader" {
-  bucket = google_storage_bucket.vm_logs.name
-  role   = "roles/storage.objectViewer"
-  member = "serviceAccount:${google_service_account.vm_sa.email}"
+module "service_account" {
+  source      = "./modules/service-account"
+  account_id  = "tf-vm-log-uploader"
+  bucket_name = module.storage.bucket_name
 }
