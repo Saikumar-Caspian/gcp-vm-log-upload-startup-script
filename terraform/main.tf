@@ -1,11 +1,10 @@
 ########################################
 # Cloud Storage Bucket for VM Logs
-########################################
-resource "google_storage_bucket" "vm_logs" {
-  name     = var.bucket_name
-  location = var.region
-
-  uniform_bucket_level_access = true
+#################################
+module "storage" {
+  source      = "./modules/storage"
+  bucket_name = var.bucket_name
+  region      = var.region
 }
 
 ########################################
