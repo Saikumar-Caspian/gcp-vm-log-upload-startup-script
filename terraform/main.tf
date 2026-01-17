@@ -1,4 +1,16 @@
 ########################################
+# Compute VM Module
+########################################
+module "compute_vm" {
+  source                = "./modules/compute-vm"
+  vm_name               = var.vm_name
+  zone                  = var.zone
+  bucket_name            = module.storage.bucket_name
+  service_account_email = module.service_account.service_account_email
+}
+
+
+########################################
 # Storage Module (Cloud Storage Bucket)
 ########################################
 module "storage" {
